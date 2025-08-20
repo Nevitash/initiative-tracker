@@ -1,6 +1,6 @@
 {
-    "id": "initiative-tracker",
-    "name": "Initiative Tracker",
+    "id": "initiative-tracker-api",
+    "name": "Initiative Tracker API",
     "version": "13.0.17",
     "minAppVersion": "0.15.0",
     "author": "Jeremy Valentine",
