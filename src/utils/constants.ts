@@ -64,7 +64,8 @@ export const DEFAULT_SETTINGS: InitiativeTrackerData = {
         status: true,
         plugin: true,
         player: true,
-        builder: true
+        builder: true,
+        api: false
     },
     hpOverflow: OVERFLOW_TYPE.ignore,
     additiveTemp: false,
@@ -80,6 +81,10 @@ export const DEFAULT_SETTINGS: InitiativeTrackerData = {
         showParty: true,
         showXP: true,
         sidebarIcon: true
+    },
+    api: {
+        webhook: "",
+        toggleShow: true
     },
     rollPlayerInitiatives: RollPlayerInitiativeBehavior.Always
 };

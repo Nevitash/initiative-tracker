@@ -51,9 +51,15 @@ export default class InitiativeTrackerSettings extends PluginSettingTab {
                     party: true,
                     plugin: true,
                     status: true,
-                    builder: true
+                    builder: true,
+                    api: this.plugin.data.api.toggleShow
                 };
             }
+            displayApi(
+                this.plugin,
+                createApiContainer(containerEl, this.plugin.data.api),
+                this.plugin.data.api
+            );
             this._displayBattle(
                 containerEl.createEl("details", {
                     cls: "initiative-tracker-additional-container",
@@ -1252,6 +1258,7 @@ class NewPlayerModal extends Modal {
 import { App, ButtonComponent, Modal } from "obsidian";
 import { tracker } from "src/tracker/stores/tracker";
 import { getId } from "src/utils/creature";
+import { createApiContainer, displayApi } from "./api.settings";
 
 export async function confirmWithModal(
     app: App,
@@ -1547,3 +1554,5 @@ class PartyModal extends Modal {
         }
     }
 }
+
+

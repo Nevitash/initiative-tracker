@@ -3,6 +3,7 @@ import type { RollPlayerInitiativeBehavior } from "src/utils";
 import type { Condition } from "src/types/creatures";
 import type { HomebrewCreature } from "src/types/creatures";
 import type { BuilderState } from "src/builder/builder.types";
+import type { ApiSettings } from "./api.settings";
 
 export interface InitiativeTrackerData {
     beginnerTips: boolean;
@@ -17,6 +18,7 @@ export interface InitiativeTrackerData {
         plugin: boolean;
         player: boolean;
         builder: boolean;
+        api: boolean;
     };
     players: HomebrewCreature[];
     parties: Party[];
@@ -46,7 +48,7 @@ export interface InitiativeTrackerData {
     builder: BuilderState;
     descending: boolean;
     version: number[];
-
+    api: ApiSettings
     rollPlayerInitiatives: RollPlayerInitiativeBehavior;
 }
 export interface InputValidate {

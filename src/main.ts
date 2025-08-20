@@ -35,6 +35,7 @@ import { API } from "./api/api";
 
 import "@javalent/fantasy-statblocks";
 import type { StackRoller } from "@javalent/dice-roller";
+import { isWebhookEnabled } from "./settings/api.settings";
 
 export default class InitiativeTracker extends Plugin {
     api = new API(this);
@@ -151,6 +152,10 @@ export default class InitiativeTracker extends Plugin {
                 `initiative-tracker:start-${encounter}`
             ];
         }
+    }
+
+    get isWebhookEnabled(): boolean{
+        return isWebhookEnabled(this.data.api);
     }
 
     get bestiaryNames(): string[] {
