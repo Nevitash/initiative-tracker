@@ -35,7 +35,7 @@ import { API } from "./api/api";
 
 import "@javalent/fantasy-statblocks";
 import type { StackRoller } from "@javalent/dice-roller";
-import { isWebhookEnabled } from "./settings/api.settings";
+import { isWebhookEnabled, sendUpdateToWebhook } from "./settings/api.settings";
 
 export default class InitiativeTracker extends Plugin {
     api = new API(this);

@@ -115,6 +115,9 @@ function createTracker() {
     });
 
     let current_order: Creature[] = [];
+    const getCurrentOrder = () => {
+        return current_order;
+    }
     const ordered = derived([condensed, data], ([values, data]) => {
         const sort = [...values];
         sort.sort((a, b) => {
@@ -910,6 +913,8 @@ function createTracker() {
         },
         logNewInitiative,
         logFile: $logFile,
+
+        getCurrentOrder,
 
         getEncounterState,
 
