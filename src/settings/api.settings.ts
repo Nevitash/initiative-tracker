@@ -1,18 +1,11 @@
 import { requestUrl, Setting } from "obsidian";
 import type InitiativeTracker from "src/main";
-import { Creature } from "src/utils/creature";
-
-let step: number = 0;
 
 export interface ApiSettings {
     webhook: string;
     toggleShow: boolean;
 }
 
-interface WebhookRequest {
-    step: number;
-    order: Creature[];
-}
 
 export function displayApi(
     initiativeTracker: InitiativeTracker,
@@ -56,33 +49,5 @@ export function createApiContainer(parent: HTMLElement, apiSettings: ApiSettings
     })
 }
 
-export function isWebhookEnabled(apiSettings: ApiSettings) {
-    if (apiSettings === null || apiSettings === undefined) {
-        return false;
-    }
-    const apiWebhook: string = apiSettings.webhook;
-    return apiWebhook !== null && apiWebhook !== undefined && apiWebhook !== ""
-}
 
-export function sendUpdateToWebhook(apiSettings: ApiSettings, plugin: InitiativeTracker) {
-    if (!isWebhookEnabled(apiSettings)) {
-        return;
-    }
-    const currentOrder: Creature[] = plugin.tracker.getCurrentOrder();
-    const request: WebhookRequest = {
-        step: step,
-        order: currentOrder
-    }
-
-    requestUrl({
-        url: apiSettings.webhook,
-        method: 'POST',
-        body: JSON.stringify(request),
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    }).catch(() => {
-        // Silently ignore errors
-    });
-}
 
