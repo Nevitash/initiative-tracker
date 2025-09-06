@@ -25,6 +25,7 @@ import type {
     DifficultyThreshold
 } from "src/utils/rpg-system";
 import type { StackRoller } from "@javalent/dice-roller";
+import { sendNewEncounterToWebhook } from "src/utils/api.utility";
 
 type HPUpdate = {
     saved: boolean;

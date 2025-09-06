@@ -35,7 +35,7 @@ import { API } from "./api/api";
 
 import "@javalent/fantasy-statblocks";
 import type { StackRoller } from "@javalent/dice-roller";
-import { isWebhookEnabled } from "./utils/api.utility";
+import { isWebhookEnabled, sendNextToWebhook, sendPriviousToWebhook, sendStartEncounterToWebhook, sendUpdateToWebhook } from "./utils/api.utility";
 
 export default class InitiativeTracker extends Plugin {
     api = new API(this);
@@ -139,6 +139,7 @@ export default class InitiativeTracker extends Plugin {
                 }
                 if (!(encounter in this.data.encounters)) return;
                 tracker.new(this, this.data.encounters[encounter]);
+                sendStartEncounterToWebhook(this.data.api, this);
             }
         });
     }
@@ -154,7 +155,7 @@ export default class InitiativeTracker extends Plugin {
         }
     }
 
-    get isWebhookEnabled(): boolean{
+    get isWebhookEnabled(): boolean {
         return isWebhookEnabled(this.data.api);
     }
 
@@ -194,7 +195,7 @@ export default class InitiativeTracker extends Plugin {
                     name
                 ) as SRDMonster;
             }
-        } catch (e) {}
+        } catch (e) { }
         return null;
     }
     getCreatureFromBestiary(name: string) {
@@ -535,6 +536,7 @@ export default class InitiativeTracker extends Plugin {
                     if (!checking) {
                         tracker.goToNext();
                     }
+                    sendNextToWebhook(this.data.api, this);
                     return true;
                 }
             }
@@ -549,6 +551,7 @@ export default class InitiativeTracker extends Plugin {
                     if (!checking) {
                         tracker.goToPrevious();
                     }
+                    sendPriviousToWebhook(this.data.api, this);
                     return true;
                 }
             }
@@ -598,6 +601,7 @@ export default class InitiativeTracker extends Plugin {
                                 roll: true
                             });
                             this.app.workspace.revealLeaf(view.leaf);
+                            sendStartEncounterToWebhook(this.data.api, this);
                         } else {
                             new Notice(
                                 "Could not find the Initiative Tracker. Try reloading the note!"
@@ -606,7 +610,7 @@ export default class InitiativeTracker extends Plugin {
                     } catch (e) {
                         new Notice(
                             "There was an issue launching the encounter.\n\n" +
-                                (e as Error).message
+                            (e as Error).message
                         );
                         console.error(e);
                         return;
@@ -671,12 +675,14 @@ export default class InitiativeTracker extends Plugin {
         }
 
         await this.saveSettings();
+        sendUpdateToWebhook(this.data.api, this);
     }
 
     async savePlayer(player: HomebrewCreature) {
         this.data.players.push(player);
         this.playerCreatures.set(player.name, Creature.from(player));
         await this.saveSettings();
+        sendUpdateToWebhook(this.data.api, this);
     }
     async savePlayers(...players: HomebrewCreature[]) {
         for (let monster of players) {
@@ -684,12 +690,14 @@ export default class InitiativeTracker extends Plugin {
             this.playerCreatures.set(monster.name, Creature.from(monster));
         }
         await this.saveSettings();
+        sendUpdateToWebhook(this.data.api, this);
     }
 
     async deletePlayer(player: HomebrewCreature) {
         this.data.players = this.data.players.filter((p) => p != player);
         this.playerCreatures.delete(player.name);
         await this.saveSettings();
+        sendUpdateToWebhook(this.data.api, this);
     }
 
     async loadSettings() {
@@ -713,6 +721,7 @@ export default class InitiativeTracker extends Plugin {
         this.data.version = this.manifest.version
             .split(".")
             .map((n) => Number(n));
+        sendUpdateToWebhook(this.data.api, this);
     }
 
     async saveSettings() {

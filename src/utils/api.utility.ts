@@ -12,12 +12,20 @@ interface WebhookRequest {
 
 let state: ApiState = {
     step: 0,
-    order: []
+    order: [],
+    encounter: {
+        id: crypto.randomUUID()
+    }
 }
 
 export interface ApiState {
     order: Creature[];
     step: number;
+    encounter: EncounterState;
+}
+
+export interface EncounterState{
+    id: string
 }
 
 enum WebhookEvent {
@@ -25,11 +33,7 @@ enum WebhookEvent {
     UPDATE = "update",
     NEXT = "next",
     PRIVIOUS = "privious",
-    ADDED_COMBATANT = "add-combatant",
-    REMOVED_COMBATANT = "remove-combatant",
-    ADDED_CONDITIONS = "add-conditions",
-    REMOVED_CONDITIONS = "remove-conditions",
-    STATS_UPDATE = "update-stats",
+    ENCOUNTER_START = "start-encounter",
 }
 
 export function isWebhookEnabled(apiSettings: ApiSettings) {
@@ -40,12 +44,13 @@ export function isWebhookEnabled(apiSettings: ApiSettings) {
     return apiWebhook !== null && apiWebhook !== undefined && apiWebhook !== ""
 }
 
-export function sendNewEncounterToWebhook(apiSettings: ApiSettings, plugin: InitiativeTracker, step?: number) {
+export function sendNewEncounterToWebhook(apiSettings: ApiSettings, plugin: InitiativeTracker) {
     if (!isWebhookEnabled(apiSettings)) {
         return;
     }
     const currentOrder = plugin.tracker.getCurrentOrder();
     state.step = 0;
+    state.encounter.id = crypto.randomUUID();
     let newState: ApiState = {
         ...state,
         order: currentOrder
@@ -58,7 +63,24 @@ export function sendNewEncounterToWebhook(apiSettings: ApiSettings, plugin: Init
     sendToWebhook(apiSettings, request);
 }
 
-export function sendUpdateToWebhook(apiSettings: ApiSettings, plugin: InitiativeTracker, step?: number) {
+export function sendStartEncounterToWebhook(apiSettings: ApiSettings, plugin: InitiativeTracker) {
+    if (!isWebhookEnabled(apiSettings)) {
+        return;
+    }
+    const currentOrder = plugin.tracker.getCurrentOrder();
+    let newState: ApiState = {
+        ...state,
+        order: currentOrder
+    }
+    const request = {
+        eventType: WebhookEvent.ENCOUNTER_START,
+        step: state.step,
+        state: newState
+    };
+    sendToWebhook(apiSettings, request);
+}
+
+export function sendUpdateToWebhook(apiSettings: ApiSettings, plugin: InitiativeTracker) {
     if (!isWebhookEnabled(apiSettings)) {
         return;
     }
@@ -75,7 +97,7 @@ export function sendUpdateToWebhook(apiSettings: ApiSettings, plugin: Initiative
     sendToWebhook(apiSettings, request);
 }
 
-export function sendNextToWebhook(apiSettings: ApiSettings, plugin: InitiativeTracker, step: number) {
+export function sendNextToWebhook(apiSettings: ApiSettings, plugin: InitiativeTracker) {
     if (!isWebhookEnabled(apiSettings)) {
         return;
     }
@@ -92,7 +114,7 @@ export function sendNextToWebhook(apiSettings: ApiSettings, plugin: InitiativeTr
     sendToWebhook(apiSettings, request);
 }
 
-export function sendPriviousToWebhook(apiSettings: ApiSettings, plugin: InitiativeTracker, step: number) {
+export function sendPriviousToWebhook(apiSettings: ApiSettings, plugin: InitiativeTracker) {
     if (!isWebhookEnabled(apiSettings)) {
         return;
     }
@@ -103,91 +125,6 @@ export function sendPriviousToWebhook(apiSettings: ApiSettings, plugin: Initiati
     }
     const request = {
         eventType: WebhookEvent.PRIVIOUS,
-        step: state.step,
-        state: newState
-    };
-    sendToWebhook(apiSettings, request);
-}
-
-export function sendAddedCombatantToWebhook(apiSettings: ApiSettings, plugin: InitiativeTracker, step?: number) {
-    if (!isWebhookEnabled(apiSettings)) {
-        return;
-    }
-    const currentOrder = plugin.tracker.getCurrentOrder();
-    let newState: ApiState = {
-        ...state,
-        order: currentOrder
-    }
-    const request = {
-        eventType: WebhookEvent.ADDED_COMBATANT,
-        step: state.step,
-        state: newState
-    };
-    sendToWebhook(apiSettings, request);
-}
-
-export function sendRemovedCombatantToWebhook(apiSettings: ApiSettings, plugin: InitiativeTracker, step?: number) {
-    if (!isWebhookEnabled(apiSettings)) {
-        return;
-    }
-    const currentOrder = plugin.tracker.getCurrentOrder();
-    let newState: ApiState = {
-        ...state,
-        order: currentOrder
-    }
-    const request = {
-        eventType: WebhookEvent.REMOVED_COMBATANT,
-        step: state.step,
-        state: newState
-    };
-    sendToWebhook(apiSettings, request);
-}
-
-export function sendAddedConditionsToWebhook(apiSettings: ApiSettings, plugin: InitiativeTracker, step?: number) {
-    if (!isWebhookEnabled(apiSettings)) {
-        return;
-    }
-    const currentOrder = plugin.tracker.getCurrentOrder();
-    let newState: ApiState = {
-        ...state,
-        order: currentOrder
-    }
-    const request = {
-        eventType: WebhookEvent.ADDED_CONDITIONS,
-        step: state.step,
-        state: newState
-    };
-    sendToWebhook(apiSettings, request);
-}
-
-export function sendRemovedConditionsToWebhook(apiSettings: ApiSettings, plugin: InitiativeTracker, step?: number) {
-    if (!isWebhookEnabled(apiSettings)) {
-        return;
-    }
-    const currentOrder = plugin.tracker.getCurrentOrder();
-    let newState: ApiState = {
-        ...state,
-        order: currentOrder
-    }
-    const request = {
-        eventType: WebhookEvent.REMOVED_CONDITIONS,
-        step: state.step,
-        state: newState
-    };
-    sendToWebhook(apiSettings, request);
-}
-
-export function sendStatsUpdateToWebhook(apiSettings: ApiSettings, plugin: InitiativeTracker, step?: number) {
-    if (!isWebhookEnabled(apiSettings)) {
-        return;
-    }
-    const currentOrder = plugin.tracker.getCurrentOrder();
-    let newState: ApiState = {
-        ...state,
-        order: currentOrder
-    }
-    const request = {
-        eventType: WebhookEvent.STATS_UPDATE,
         step: state.step,
         state: newState
     };
