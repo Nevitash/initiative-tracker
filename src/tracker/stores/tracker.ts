@@ -25,7 +25,7 @@ import type {
     DifficultyThreshold
 } from "src/utils/rpg-system";
 import type { StackRoller } from "@javalent/dice-roller";
-import { sendNewEncounterToWebhook } from "src/utils/api.utility";
+import { sendNewEncounterToWebhook, sendStartEncounterToWebhook, sendUpdateToWebhook } from "src/utils/api.utility";
 
 type HPUpdate = {
     saved: boolean;
@@ -66,6 +66,7 @@ function createTracker() {
     const setState = (state: boolean) => {
         $state.set(state);
         if (state) {
+            sendStartEncounterToWebhook();
             if (!_logger?.logging) {
                 _logger
                     ?.new({
@@ -319,6 +320,7 @@ function createTracker() {
     function updateAndSave(updater: Updater<Creature[]>): void {
         update(updater);
         trySave();
+        sendUpdateToWebhook();
     }
 
     const setNumbers = (list: Creature[]) => {
@@ -764,7 +766,8 @@ function createTracker() {
                 rollIntiative(plugin, creatures);
                 return creatures;
             }),
-        new: (plugin: InitiativeTracker, state?: InitiativeViewState) =>
+        new: (plugin: InitiativeTracker, state?: InitiativeViewState) =>{
+            sendNewEncounterToWebhook();
             updateAndSave((creatures) => {
                 $round.set(state?.round ?? 1);
                 $state.set(state?.state ?? false);
@@ -837,7 +840,8 @@ function createTracker() {
                     $logFile.set(null);
                 }
                 return creatures;
-            }),
+            });
+        },
         reset: () =>
             updateAndSave((creatures) => {
                 for (let creature of creatures) {

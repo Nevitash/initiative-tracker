@@ -3,6 +3,7 @@ import type InitiativeTracker from "../main";
 import { tracker } from "../tracker/stores/tracker";
 import { type HomebrewCreature } from "src/types/creatures";
 import { Creature } from "src/utils/creature";
+import { initialize } from "src/utils/api.utility";
 
 declare module "obsidian" {
     interface Workspace {
@@ -47,6 +48,7 @@ declare global {
 export class API {
     #tracker = tracker;
     constructor(public plugin: InitiativeTracker) {
+        initialize(plugin);
         (window["InitiativeTracker"] = this) &&
             this.plugin.register(() => delete window["InitiativeTracker"]);
     }
