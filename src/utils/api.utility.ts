@@ -219,12 +219,10 @@ export function sendPriviousToWebhook() {
 }
 
 function _getApiSettings(): ApiSettings | null {
-    console.log("Getting API settings...");
     if (state.settings == null
         && state.plugin != null
         && state.plugin.data != null
         && state.plugin.data.api != null) {
-        console.log("Loading API settings from plugin data...");
         state.settings = state.plugin.data.api;
     }
     return state.settings ?? null;
@@ -236,7 +234,6 @@ function sendToWebhook(request: WebhookRequest) {
         return;
     }
     state.step++;
-    console.log("Sending webhook request:", request);
     requestUrl({
         url: settings.webhook,
         method: 'POST',
