@@ -1,52 +1,63 @@
-> 🥇 Our documentation has moved ***[here](https://plugins.javalent.com/it)***.
->
-> <a href='https://www.buymeacoffee.com/valentine195' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://storage.ko-fi.com/cdn/kofi3.png?v=3' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
----
+﻿# Initiative Tracker _(initiative-tracker)_
 
-The Initiative Tracker plugin for **[Obsidian](https://obsidian.md)** allows you to keep track of initiative and turn order during combat encounters in tabletop role-playing games.
+[![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 
-With this plugin, you can add creatures and NPCs to the initiative tracker, and track their health, armor class, and other stats. The plugin also calculates experience points for creatures, and supports both custom and SRD creatures from the **[Fantasy Statblocks](https://github.com/javalent/fantasy-statblocks)** plugin.
+TTRPG initiative and encounter tracker plugin for Obsidian.md.
 
-## Features
-- Add and remove creatures from the encounter
-- Input creature name, HP, AC and initiative
-- Calculate creature XP based on level or challenge rating
-- Group identical creatures together to simplify the encounter
-- Set creature display names to differentiate identical creatures
-- Supports dice rolls to add random amount creatures
-- Keep track of creature HP, AC and status
-- Sort creatures by initiative automatically
-- Add several encounters in one code block
-- Automatically save and load encounters
-- And much, much more...
+Initiative Tracker is an Obsidian plugin that manages initiative, creature stats, and turn order during tabletop roleplaying combat encounters directly inside markdown notes.
 
-### Quickstart
+## Table of Contents
 
-- Install the Initiative Tracker plugin in Obsidian.
-- Open a note where you want to keep track of your encounter.
-- Create a code block with the language set to \`\`\`encounter.
+- [Background](#background)
+- [Install](#install)
+- [Usage](#usage)
+- [Maintainers](#maintainers)
+- [Contributing](#contributing)
+- [License](#license)
 
-````yaml
-```encounter
-name: Example
-creatures:
- - 3: Goblin
-```
-````
+## Background
 
-- Add creatures to the encounter by name, dice roll or bestiary entry.
-- Launch the encounter by clicking on the play button, and start tracking initiative.
+Running tabletop RPG combats while maintaining campaign notes inside Obsidian requires seamless in-app encounter tooling. This plugin allows GMs to create encounter codeblocks, manage active HP and Armor Class, calculate creature XP, and seamlessly integrate with SRD and Fantasy Statblocks plugins.
 
-Check out the **[plugin documentation](https://plugins.javalent.com/it)** for more detailed instructions and examples.
+## Install
 
-## Support
+### Obsidian Community Plugins
 
-If you encounter any issues, want to give back and help out, or have suggestions for new features, file an issue on the **[GitHub repository](https://github.com/valentine195/obsidian-initiative-tracker/issues)**.
+1. In Obsidian Settings, open **Community Plugins**.
+2. Search for `Initiative Tracker`.
+3. Click **Install**, then **Enable**.
 
-### TTRPG plugins
+### Manual Development Build
 
-If you're using Obsidian to run/plan a TTRPG, you may find my other plugins useful:
+Requires Node.js:
 
-- **[Obsidian Leaflet](https://github.com/valentine195/obsidian-leaflet-plugin)** Adds interactive maps to Obsidian notes
-- **[Dice Roller](https://github.com/valentine195/obsidian-dice-roller)** Inline dice rolling for Obsidian
-- **[Fantasy Statblocks](https://github.com/valentine195/obsidian-5e-statblocks)** Format Statblocks inside Obsidian
+`ash
+npm install
+npm run build
+`
+
+Copy main.js, manifest.json, and styles.css into your Obsidian vault's .obsidian/plugins/initiative-tracker/ folder.
+
+## Usage
+
+Insert an initiative tracker code block into any Obsidian markdown note:
+
+``markdown
+`initiative
+`
+``
+
+Add creatures and encounter combatants through the UI controls or note parameters to begin tracking turns and health points.
+
+## Maintainers
+
+Fork maintained by [@Nevitash](https://github.com/Nevitash).
+Upstream author: [@javalent](https://github.com/javalent).
+
+## Contributing
+
+PRs are welcome. For significant features or breaking changes, please open an issue first.
+
+## License
+
+[GNU General Public License v3.0](LICENSE)
