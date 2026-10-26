@@ -1,4 +1,4 @@
-﻿# Initiative Tracker _(initiative-tracker)_
+# Initiative Tracker _(initiative-tracker)_
 
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 
@@ -31,21 +31,21 @@ Running tabletop RPG combats while maintaining campaign notes inside Obsidian re
 
 Requires Node.js:
 
-`ash
+```bash
 npm install
 npm run build
-`
+```
 
-Copy main.js, manifest.json, and styles.css into your Obsidian vault's .obsidian/plugins/initiative-tracker/ folder.
+Copy `main.js`, `manifest.json`, and `styles.css` into your Obsidian vault's `.obsidian/plugins/initiative-tracker/` folder.
 
 ## Usage
 
 Insert an initiative tracker code block into any Obsidian markdown note:
 
-``markdown
-`initiative
-`
-``
+````markdown
+```initiative
+```
+````
 
 Add creatures and encounter combatants through the UI controls or note parameters to begin tracking turns and health points.
 
